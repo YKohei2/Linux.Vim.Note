@@ -132,4 +132,67 @@ cronの書き方
 
 
 
+----------------------------------------------
+システムログ(システムが動作した履歴)
+*messages(Linuxのシステムに関する一般的なメッセージ、ユーザーの認証情報、アプリケーションに関するメッセージ。）
+ var/log/messages (cron, mailing, secure)
+
+*syslog (rsyslog) (ログをサーバーに送信、転送する機能、プロトコル)
+ etc/syslog.config(rsyslog.conf)　
+
+syslog設定 
+Facility (ログに種別)種類
+auth, authpriv(認証サービス)
+cron
+daemon
+kern(カーネル)
+lpr (印刷システム)
+mail(メールシステム)
+news(ニュースサービス)
+syslog
+user(ユーザーのプログラム)
+local0～local7(独自の設定)
+* (すべてのファシリティを選択)
+
+Priorityの種類 
+emerg
+alert
+crit
+err
+warning
+notice
+info
+debug
+none (ファシリティ無効,{メッセージを送らない})
+- 上に行くほど緊急性が高い。
+- 通常指定したプライオリティ以上のログが出力される。(critを選べばcrit,alert,emergが出力される)
+- =を選べば特定のログだけ出力される
+
+設定例:
+*.info;mail.none;authpriv.none;cron.none
+;を使うことで複数のfacilityとPriorityの組み合わせを設定できる)
+
+ログのローテーション
+/etc/logrotate.conf
+
+世代を指定してそれ以上保存しないように設定する。（ファイルサイズが大きくなりすぎるのを防ぐため)
+
+ログローテートの例:
+# rotate log files weekly
+weekly (週次でログを取得、daily, monthlyも設定可能)
+
+# keep 4 weeks worth of backlogs
+rotate 4 (４回分のログを取得）
+
+# create new (empty) log files after rotating old ones
+create（ローテート後に新たなログファイルを作成）
+
+# use date as a suffix of the rotated file
+dateext（ローテート後のファイル名に日付を付与）
+
+# uncomment this if you want your log files compressed
+#compress（ログの圧縮をする場合はコメントアウト解除）
+
+# RPM packages drop log rotation information into this directory
+include /etc/logrotate.d（/etc/logrotate.d配下のファイルも設定ファイルとする）
 
