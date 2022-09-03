@@ -1,0 +1,31 @@
+Aug 23 05:53:10 ip-172-31-44-142 crond[2374]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 77% if used.)
+Aug 23 05:53:10 ip-172-31-44-142 crond[2374]: (CRON) INFO (running with inotify support)
+Aug 23 05:55:01 ip-172-31-44-142 crond[2374]: (CRON) INFO (Shutting down)
+Aug 23 05:55:17 ip-172-31-44-142 crond[2286]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 32% if used.)
+Aug 23 05:55:17 ip-172-31-44-142 crond[2286]: (CRON) INFO (running with inotify support)
+Aug 23 05:56:04 ip-172-31-44-142 crond[2286]: (CRON) INFO (Shutting down)
+Aug 23 05:57:22 ip-172-31-44-142 crond[2276]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 89% if used.)
+Aug 23 05:57:22 ip-172-31-44-142 crond[2276]: (CRON) INFO (running with inotify support)
+Aug 23 06:00:01 ip-172-31-44-142 CROND[2397]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+Aug 23 06:01:01 ip-172-31-44-142 CROND[2405]: (root) CMD (run-parts /etc/cron.hourly)
+Aug 23 06:01:01 ip-172-31-44-142 run-parts(/etc/cron.hourly)[2405]: starting 0anacron
+Aug 23 06:01:01 ip-172-31-44-142 anacron[2415]: Anacron started on 2022-08-23
+Aug 23 06:01:01 ip-172-31-44-142 run-parts(/etc/cron.hourly)[2417]: finished 0anacron
+Aug 23 06:01:01 ip-172-31-44-142 anacron[2415]: Will run job `cron.daily' in 42 min.
+Aug 23 06:01:01 ip-172-31-44-142 anacron[2415]: Will run job `cron.weekly' in 62 min.
+Aug 23 06:01:01 ip-172-31-44-142 anacron[2415]: Will run job `cron.monthly' in 82 min.
+Aug 23 06:01:01 ip-172-31-44-142 anacron[2415]: Jobs will be executed sequentially
+Aug 23 06:10:01 ip-172-31-44-142 CROND[10725]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+Aug 23 06:16:54 ip-172-31-42-220 crond[2276]: (CRON) INFO (Shutting down)
+Aug 28 01:50:22 ip-172-31-42-220 crond[4269]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 40% if used.)
+Aug 28 01:50:22 ip-172-31-42-220 crond[4269]: (CRON) INFO (running with inotify support)
+Aug 28 01:51:01 ip-172-31-42-220 CROND[6519]: (root) CMD (/home/ec2-user/.c9/stop-if-inactive.sh)
+Aug 28 01:52:01 ip-172-31-42-220 CROND[6930]: (root) CMD (/home/ec2-user/.c9/stop-if-inactive.sh)
+Aug 28 01:53:01 ip-172-31-42-220 CROND[7590]: (root) CMD (/home/ec2-user/.c9/stop-if-inactive.sh)
+Aug 28 01:54:01 ip-172-31-42-220 CROND[7986]: (root) CMD (/home/ec2-user/.c9/stop-if-inactive.sh)
+Aug 28 01:55:01 ip-172-31-42-220 CROND[8383]: (root) CMD (/home/ec2-user/.c9/stop-if-inactive.sh)
+Aug 28 01:56:01 ip-172-31-42-220 CROND[8771]: (root) CMD (/home/ec2-user/.c9/stop-if-inactive.sh)
+Aug 28 01:57:01 ip-172-31-42-220 CROND[9168]: (root) CMD (/home/ec2-user/.c9/stop-if-inactive.sh)
+Aug 28 01:58:01 ip-172-31-42-220 CROND[9565]: (root) CMD (/home/ec2-user/.c9/stop-if-inactive.sh)
+Aug 28 01:59:01 ip-172-31-42-220 CROND[10013]: (root) CMD (/home/ec2-user/.c9/stop-if-inactive.sh)
+Aug 28 02:00:01 ip-172-31-42-220 CROND[10411]: (root) CMD (/home/ec2-user/.c9/stop-if-inactive.sh)
