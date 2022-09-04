@@ -1,0 +1,33 @@
+マウント...ストレージデバイスをLinuxに認識させて使用できるようにすること
+マウントポイント..マウントで繋げるときに使うディレクトリ。
+マウント接続コマンド
+# mount /dev/sdb1 /mnt (sdb1はデバイスの名称)
+
+アンマウント...逆に外付けストレージデバイスを切り離すこと
+アンマウントコマンド
+# unmount /mnt
+
+マウント設定ファイル..どのようにマウントするかなど
+/etc/fstab
+OSの電源を切るとマウントが外れるため、設定をして再起動したときに自動でマウントするようにする。
+設定後は# mount -a or OS再起動
+
+fstab(ec2インスタンスに関してのデフォルトの記述
+#
+UUID=d784ecf4-c440-404a-99f8-4958c6bdd438     /           xfs    defaults,noatime  1      1
+(file system)                               (directly)   (type)  (option)         (damp) (pass)
+/var/swapfile swap swap defaults 0 0
+
+UUID(機器を識別するためのID番号)
+$blkidでUUIDを調べる
+
+type(マウントされるパーティションやストレージデバイスのファイルシステムタイプ)
+ext2, btrfs, reserfs, autoなどがある
+
+option(rw読み書き可能, ro読み出しのみ, execバイナリの実行許可) 
+defaults(rw, suid, dev, exec, auto, nouser, asyncが入っている）
+
+dump(バックアップのこと。1が必要0不必要)
+
+pass (fsckがブート時にファイルシステムをチェックする実行順序を決定する。ルートファイルシステムは1, それ以外は2, 不必要は0)
+fsckコマンド.. ファイルシステムを検査、修復するコマンド
