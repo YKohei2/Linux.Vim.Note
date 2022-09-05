@@ -15,7 +15,7 @@ OSの電源を切るとマウントが外れるため、設定をして再起動
 fstab(ec2インスタンスに関してのデフォルトの記述
 #
 UUID=d784ecf4-c440-404a-99f8-4958c6bdd438     /           xfs    defaults,noatime  1      1
-(file system)                               (directly)   (type)  (option)         (damp) (pass)
+(file system)                               (directly)   (type)  (option)         (dump) (pass)
 /var/swapfile swap swap defaults 0 0
 
 UUID(機器を識別するためのID番号)
