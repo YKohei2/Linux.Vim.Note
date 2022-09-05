@@ -1,0 +1,35 @@
+パッケージ管理
+
+ディストリビューション　　　　 パッケージ管理システム
+Debian, Ubuntuなど             Debian形式 
+Red Hat Enterprise Linux,      RPM形式 
+Amazon Linuxなど
+
+コマンド
+rpm -ivh  
+rpm -Uvh
+rpm -evh 
+i..install
+U..upgrade
+e..erase
+v..詳細
+h..進捗状況確認 
+
+yumがあれば内部でrpmコマンドを使用して依存関係も自動で解決してくれるので、
+rpmを使わずyumを使うことが多い
+
+
+
+EPEL..デフォルトにないパッケージをインストールするときに使う
+　　　サードパーティ製のレポジトリ。利用は自己責任。
+
+yumコマンド (例：tmux=パッケージ名)
+# yum repolist (利用可能なレポジトリの一覧)
+# yum install -y tmux
+# yum update -y tmux
+# yum remove -y tmux
+# yum list (利用可能なパッケージのリスト)
+
+EPELインストール
+# amazon-linux-extras install -y epel (EPELインストール)
+
