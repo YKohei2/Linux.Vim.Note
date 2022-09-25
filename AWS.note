@@ -2,10 +2,10 @@
 1.VPC作成
 2.サブネット作成
 3.インターネットゲートウェイ作成
-4.ルートテーブル作成
+4.ルートテーブル作成 (インターネットゲートウェイに向けてルートを設定する)
 5.ルートテーブルをサブネットにアタッチ
 6.パブリック用EC2インスタンス作成
-7.セキュリティグループ作成
+7.セキュリティグループ作成 (SSH接続できるようインバウンドに22を許可する)
 8.セキュリティグループをEC2にアタッチ
 9.EC2にSSH接続
 10.Elastic IP作成
@@ -16,12 +16,40 @@
   2 chmodでキーペアファイルの権限を700に変更 ($ chmod 700 キーペアファイル名) 
   3 ssh -i rsa.pem(キーペア名)ec2-user@10.0.1.143(プライベートIPアドレス)これで踏み台サーバを使ってプライベートインスタンスに接続完了
 14.NATゲートウェイ作成
-15.プライベートサブネットのルートテーブル作成でNATゲートウェイにつなげる
-
+15.プライベートサブネットのルートテーブル作成でNATゲートウェイにつなげる(デフォルトのローカル接続はそのままで,0.0.0.0/0でNATゲートウェイに接続)
 
 
 削除手順：
 1.EC2削除
 2.NATゲートウェイ削除
 3.ElasticIP削除
-4.VPC削除
+4.ピアリング削除
+5.VPC削除
+
+
+◎VPCピアリング作成接続　（２つのVPC内のプライベートインスタンス同士の接続), Ping通信確認
+0.接続先のVPC,サブネット、ルートテーブル,EC2作成
+1.VPCピアリングを作成
+  1.リクエスト側のVPCとその先のVPCを選択
+  2.コンソール画面、ピアリングトップページでアクションから承諾を押す
+2.リクエスト元と2つ目のVPC内にあるサブネットのルートテーブルをVPCピアリング(お互いのCIDRマスク)に向けるよう追加
+3.3つ目のEC2のセキュリティグループのインバウンドにすべてのICMP iPv44を選択してPING通信をできるようにする.
+4.１つ目のVPC内のプライベートEC2インスタンスから$ping (相手先のIPアドレス)でPingの確認ができる
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+
+AWS CLI インストール、設定方法 手順  Linux
+$ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+$ curl -o awscliv2.sig https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip.sig(最新バージョン)
+$ gpg --verify awscliv2.sig awscliv2.zip（署名検証)
+$ unzip awscliv2.zip (zipフォルダ解凍)
+$ sudo ./aws/install (インストールプログラム実行)
+$ ./aws/install -i /usr/local/aws-cli -b /usr/local/bin (パスの指定)
+$ aws --version (確認)
+
+$ AWS configure (設定)
+AWS Access Key ID: IAM → ユーザー → 認証情報 → アクセスキー作成
+AWS Secret Access Key:  IAM → ユーザー → 認証情報 → アクセスキー作成
+Default region name: ap-northeast-1
+Default output format: 記入なしでもOk. Jsonになる
+
