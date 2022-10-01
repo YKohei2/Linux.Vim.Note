@@ -2,10 +2,10 @@
 1.VPC作成
 2.サブネット作成
 3.インターネットゲートウェイ作成
-4.ルートテーブル作成
+4.ルートテーブル作成 (インターネットゲートウェイに向けてルートを設定する)
 5.ルートテーブルをサブネットにアタッチ
 6.パブリック用EC2インスタンス作成
-7.セキュリティグループ作成
+7.セキュリティグループ作成 (SSH接続できるようインバウンドに22を許可する)
 8.セキュリティグループをEC2にアタッチ
 9.EC2にSSH接続
 10.Elastic IP作成
@@ -16,12 +16,86 @@
   2 chmodでキーペアファイルの権限を700に変更 ($ chmod 700 キーペアファイル名) 
   3 ssh -i rsa.pem(キーペア名)ec2-user@10.0.1.143(プライベートIPアドレス)これで踏み台サーバを使ってプライベートインスタンスに接続完了
 14.NATゲートウェイ作成
-15.プライベートサブネットのルートテーブル作成でNATゲートウェイにつなげる
-
+15.プライベートサブネットのルートテーブル作成でNATゲートウェイにつなげる(デフォルトのローカル接続はそのままで,0.0.0.0/0でNATゲートウェイに接続)
 
 
 削除手順：
 1.EC2削除
 2.NATゲートウェイ削除
 3.ElasticIP削除
-4.VPC削除
+4.ピアリング削除
+5.VPC削除
+
+
+◎VPCピアリング作成接続　（２つのVPC内のプライベートインスタンス同士の接続), Ping通信確認
+0.接続先のVPC,サブネット、ルートテーブル,EC2作成
+1.VPCピアリングを作成
+  1.リクエスト側のVPCとその先のVPCを選択
+  2.コンソール画面、ピアリングトップページでアクションから承諾を押す
+2.リクエスト元と2つ目のVPC内にあるサブネットのルートテーブルをVPCピアリング(お互いのCIDRマスク)に向けるよう追加
+3.3つ目のEC2のセキュリティグループのインバウンドにすべてのICMP iPv44を選択してPING通信をできるようにする.
+4.１つ目のVPC内のプライベートEC2インスタンスから$ping (相手先のIPアドレス)でPingの確認ができる
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+
+AWS CLI インストール、設定方法 手順  Linux
+$ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+$ curl -o awscliv2.sig https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip.sig(最新バージョン)
+$ gpg --verify awscliv2.sig awscliv2.zip（署名検証)
+$ unzip awscliv2.zip (zipフォルダ解凍)
+$ sudo ./aws/install (インストールプログラム実行)
+$ ./aws/install -i /usr/local/aws-cli -b /usr/local/bin (パスの指定)
+$ aws --version (確認)
+
+$ AWS configure --profile ec2-user (設定) profileをつけることでユーザー名を追加できる。
+AWS Access Key ID: IAM → ユーザー → 認証情報 → アクセスキー作成
+AWS Secret Access Key:  IAM → ユーザー → 認証情報 → アクセスキー作成 ここで適当なユーザー情報を入れると権限がないのでコマンドを実行できない
+Default region name: ap-northeast-1
+Default output format: 記入なしでもOk. Jsonになる
+profileでユーザーの情報を入れた後はcredentials, config内のデフォルト情報は消すようにする
+
+消した後はコマンドの末尾に --profile ec2-user(ユーザー名)をつけないと権限がないので見れない
+
+.awsのディレクトリの中config と credentialに AWS access key ID, AWS secret access keyregion, output formの設定ファイルがある
+
+AWS CLIコマンド
+$ aws help コマンド確認 
+$ aws ec2 help  ec2関連のコマンド確認
+
+コマンドにdescribeがある場合詳細を見れるコマンド
+$ aws ec2 describe-vpcs 現在あるvpcの情報
+
+後ろにつける--query Vpcs[].VpcId、vpcのid情報のみ出してくれる。[]に数字を入れると必要なものだけを出力できる。0一番上,1,2,3
+
+
+----------------------------------------------
+
+S3エンドポイント (プライベートec2インスタンスからS3に接続)
+1.プライベートec2インスタンスにNATゲートウェイでインターネット接続してAWS CLIコマンドインストール
+2.S3エンドポイント作成
+  1.VPC選択
+  2.s3検索してゲートウェイタイプを選択
+  3.プライベートサブネットに使っているルートテーブルを選択
+  
+----------------------------------------------
+
+VPC CloudWatch Flow logs作成手順
+
+1.IAMから空のロールを作成
+  とりあえずAWSのサービス,EC2にチェックして,許可ポリシーは選ばないで空のロールを作成する。
+2.先ほど作成したロールを選んでポリシーを追加する。
+  1.許可を追加からインラインポリシーを作成を選ぶ
+  2.jsonからデフォルトのjsonで記述しているものを削除して公式のVPCフローログのロールのjsonをコピーしてペーストして作成を完了する。
+  公式URL: https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/flow-logs-cwl.html
+3.ロールの信頼関係の編集
+  1.信頼ポリシーを編集
+  2.公式のjsonから引っ張てくる。（principalのserviceの部分をec2からvpcが記述されているものに変更する。)
+  3.更新ボタンを押す
+4.CloudWatchロググループを作成
+  保持期間が長いと、料金が高くなる。
+5.VPCからフローログを作成
+  - フィルタ..承諾されたトラフィックのみ保管か（失敗のみか、両方保管か)
+  - CloudWatch Logsに送信
+  - 先ほど作ったロググループとIAMロールを選択
+  - ログ形式はカスタムから属性すべてを選択するとすべての情報を入手できる。
+  
